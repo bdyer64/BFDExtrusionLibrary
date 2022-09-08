@@ -4,5 +4,5 @@ include <panel_retainers.scad>
 $fn=60;
 
 
-stand_alone_side_retainer_5mm();
+//stand_alone_side_retainer_5mm();
 
