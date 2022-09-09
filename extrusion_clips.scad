@@ -17,7 +17,7 @@ module extrusion_interior(length) {
     }
 }
 
-module extrusion_clip(width=default_clip_width,clip_extension=default_clip_depth) {
+module extrusion_clip(width=default_clip_width,clip_extension=default_clip_depth,stiffness=0.5) {
     translate([-rail_gap_width/2,-width/2,channel_height-((channel_height+rail_gap_height+clip_extension)/2)])
     difference() {
         cube([rail_gap_width,width,rail_gap_height+clip_extension])
@@ -29,8 +29,8 @@ module extrusion_clip(width=default_clip_width,clip_extension=default_clip_depth
         rotate([180,0,-90])
         wedge([width, (channel_width-rail_gap_width)/2, (channel_width-rail_gap_width)/2]);
         translate([rail_gap_width/2,width/2,-channel_height] ) rotate([0,0,90]) prismoid([width,rail_gap_width-2],[width,rail_gap_width-3],h=channel_height);
-        translate([1.5,0,-channel_height])
-        cube([rail_gap_width-3,width,channel_height+rail_gap_height+clip_extension-1]);
+        translate([(4*stiffness)/2,0,-channel_height])
+        cube([rail_gap_width-(4*stiffness),width,channel_height+rail_gap_height+clip_extension-1]);
     }           
 }
 
@@ -48,10 +48,10 @@ module extrusion_clip_hole(width=default_clip_width,clip_extension=default_clip_
     }           
 }
     
-module offset_anchored_extrusion_clip(width=default_clip_width,clip_extension=default_clip_depth)  {
+module offset_anchored_extrusion_clip(width=default_clip_width,clip_extension=default_clip_depth,stiffness=0.5)  {
     total_h = clip_extension+channel_height+rail_gap_height;
 
-    extrusion_clip(width,clip_extension);
+    extrusion_clip(width,clip_extension,stiffness);
     translate([rail_gap_width/2,-width/2,-(clip_extension+1)+(total_h)/2])
     union() {
         difference() {
@@ -95,3 +95,5 @@ if (render_test) {
     translate([32,0,0])
     offset_anchored_extrusion_clip_hole();
 }
+
+offset_anchored_extrusion_clip(clip_extension=7);
